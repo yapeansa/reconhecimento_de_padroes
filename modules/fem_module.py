@@ -1,8 +1,8 @@
 import numpy as np
 
 class FiniteElement1D:
-    def __init__(self):
-        pass
+    def __init__(self, f):
+        self.f = f
 
     # Função para obtenção das bases e dos pesos
     def shg_w(self, nint, nen):
@@ -67,7 +67,7 @@ class FiniteElement1D:
         return shg1, shg2, w
     
     # Construção das matrizes K e F
-    def make_matrices(self, f, a, b, nel, nint, nen, u_a, u_b):
+    def make_matrices(self, a, b, nel, nint, nen, u_a, u_b):
         # Parâmetros
         h = (b - a) / nel
         # Funções base e pesos
@@ -90,7 +90,7 @@ class FiniteElement1D:
                 for i in range(nen):
                     xx += shg1[i, l]*xl[i]
                 for j in range(nen):
-                    Fe[j] += f(xx)*shg1[j, l]*w[l]*(h/2)
+                    Fe[j] += self.f(xx)*shg1[j, l]*w[l]*(h/2)
                     for i in range(nen):
                         Ke[i, j] += shg2[i, l]*(2/h)*shg2[j, l]*(2/h)*w[l]*(h/2)
         
